@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper" data-font="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Classroom Expense Tracker | LedgerLoopStudio (Free Demo)</title>
+<meta name="description" content="Every classroom dollar tracked, every receipt saved, every tax deduction found. Offline, private, no account.">
+<style>
+/* ================================================================
+   LEDGERLOOPSTUDIO — "CHALK & APPLE" VISUAL IDENTITY
+   School-paper light default, chalkboard dark option, apple-red
+   accents, chalk-green secondary. Chalk-style headers, report-card
+   stat blocks, sticker category badges. System fonts only.
+   Offline single file. Display: serif · UI: system sans.
+   ================================================================ */
+:root, [data-theme="paper"]{
+  color-scheme:light;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-display:Georgia,"Iowan Old Style","Palatino Linotype",serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --bg:#F7F2E6; --bg2:#EFE7D2; --surface:#FFFDF7; --surface2:#FBF6E9;
+  --text:#26282B; --muted:#7A7264; --faint:#B3A98F;
+  --line:#E4D9BE; --line2:#D5C6A2;
+  --accent:#C0392B; --accent-d:#96281B; --accent-t:#F9E3DE; --accent-line:#E5A99E;
+  --green:#2E7D4F; --green-d:#1F5C38; --green-t:#E0F0E6; --green-line:#9CC7AC;
+  --gold:#B98A2F; --gold-t:#F7EDD4;
+  --paper-line:#E9E0C8;
+  --good:#2E7D4F; --good-t:#E0F0E6;
+  --danger:#C0392B; --danger-t:#F9E3DE;
+  --warn:#A87418; --warn-t:#F7ECD2;
+  --shadow:0 14px 36px rgba(90,70,30,.10), 0 2px 8px rgba(90,70,30,.06);
+  --shadow-s:0 4px 16px rgba(90,70,30,.08);
+  --radius:18px; --radius-s:12px;
+  --font:var(--font-sans);
+}
+[data-theme="chalkboard"]{
+  color-scheme:dark;
+  --bg:#1E3529; --bg2:#162820; --surface:#274434; --surface2:#2E4E3B;
+  --text:#F4F1E4; --muted:#B9C4B2; --faint:#7E8F80;
+  --line:#3A5546; --line2:#4A6A57;
+  --accent:#E8604C; --accent-d:#C0392B; --accent-t:#47241C; --accent-line:#8A4A3A;
+  --green:#7FB069; --green-d:#5C8A4E; --green-t:#243A26; --green-line:#4E6B4A;
+  --gold:#D8A24A; --gold-t:#3A2E14;
+  --paper-line:#3A5546;
+  --good:#7FB069; --good-t:#243A26;
+  --danger:#E8604C; --danger-t:#47241C;
+  --warn:#D8A24A; --warn-t:#3A2E14;
+  --shadow:0 14px 36px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.25);
+  --shadow-s:0 4px 16px rgba(0,0,0,.3);
+  --radius:18px; --radius-s:12px;
+  --font:var(--font-sans);
+}
+[data-theme="apple"]{
+  color-scheme:light;
+  --bg:#FDF6F4; --bg2:#F7E9E5; --surface:#FFFFFF; --surface2:#FDF1EE;
+  --text:#2B2422; --muted:#8A7A74; --faint:#C2B3AB;
+  --line:#EAD5CE; --line2:#DBBBAE;
+  --accent:#C0392B; --accent-d:#96281B; --accent-t:#F9E3DE; --accent-line:#E5A99E;
+  --green:#2E7D4F; --green-d:#1F5C38; --green-t:#E0F0E6; --green-line:#9CC7AC;
+  --gold:#B98A2F; --gold-t:#F7EDD4;
+  --paper-line:#EFE0D8;
+  --good:#2E7D4F; --good-t:#E0F0E6;
+  --danger:#C0392B; --danger-t:#F9E3DE;
+  --warn:#A87418; --warn-t:#F7ECD2;
+  --shadow:0 14px 36px rgba(120,40,30,.10), 0 2px 8px rgba(120,40,30,.06);
+  --shadow-s:0 4px 16px rgba(120,40,30,.08);
+  --radius:18px; --radius-s:12px;
+  --font:var(--font-sans);
+}
+[data-theme="slate"]{
+  color-scheme:dark;
+  --bg:#22252A; --bg2:#1A1D21; --surface:#2B2F36; --surface2:#333842;
+  --text:#F2F3F5; --muted:#A8ADB8; --faint:#6E7480;
+  --line:#3D434C; --line2:#4D545F;
+  --accent:#E0604E; --accent-d:#C0392B; --accent-t:#47241C; --accent-line:#8A4A3A;
+  --green:#7FB069; --green-d:#5C8A4E; --green-t:#243A26; --green-line:#4E6B4A;
+  --gold:#D8A24A; --gold-t:#3A2E14;
+  --paper-line:#3D434C;
+  --good:#7FB069; --good-t:#243A26;
+  --danger:#E0604E; --danger-t:#47241C;
+  --warn:#D8A24A; --warn-t:#3A2E14;
+  --shadow:0 14px 36px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.25);
+  --shadow-s:0 4px 16px rgba(0,0,0,.3);
+  --radius:18px; --radius-s:12px;
+  --font:var(--font-sans);
+}
+[data-theme="notebook"]{
+  color-scheme:light;
+  --bg:#F2F5F9; --bg2:#E7ECF3; --surface:#FFFFFF; --surface2:#F7F9FC;
+  --text:#232A35; --muted:#75808F; --faint:#B4BDC9;
+  --line:#D9E1EC; --line2:#C2CDDC;
+  --accent:#2F5DA3; --accent-d:#22467C; --accent-t:#E1EBF9; --accent-line:#9DB9DC;
+  --green:#2E7D4F; --green-d:#1F5C38; --green-t:#E0F0E6; --green-line:#9CC7AC;
+  --gold:#B98A2F; --gold-t:#F7EDD4;
+  --paper-line:#E3EAF4;
+  --good:#2E7D4F; --good-t:#E0F0E6;
+  --danger:#C0392B; --danger-t:#F9E3DE;
+  --warn:#A87418; --warn-t:#F7ECD2;
+  --shadow:0 14px 36px rgba(40,70,120,.10), 0 2px 8px rgba(40,70,120,.06);
+  --shadow-s:0 4px 16px rgba(40,70,120,.08);
+  --radius:18px; --radius-s:12px;
+  --font:var(--font-sans);
+}
+[data-font="serif"]{ --font:Georgia,"Iowan Old Style","Palatino Linotype",serif; }
+[data-font="mono"]{ --font:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+[data-font="rounded"]{ --font:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,sans-serif; }
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.55; min-height:100vh;
+  background-image:repeating-linear-gradient(0deg, transparent, transparent 31px, var(--paper-line) 31px, var(--paper-line) 32px);}
+::selection{background:var(--accent-t);}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky; top:0; z-index:50; backdrop-filter:blur(12px);
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  border-bottom:1px solid var(--line);}
+.topbar-in{max-width:1180px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+.brand{display:flex; align-items:center; gap:10px; margin-right:auto;}
+.brand .dot{width:34px; height:34px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent-d));
+  display:grid; place-items:center; color:#fff; font-weight:800; font-size:18px; box-shadow:var(--shadow-s);}
+.brand b{font-family:var(--font-display); font-size:17px; letter-spacing:.2px; display:block; line-height:1.2;}
+.brand small{font-size:10.5px; letter-spacing:2.5px; color:var(--muted); font-weight:700;}
+.topctl{display:flex; align-items:center; gap:8px;}
+select.input, input.input, textarea.input{font-family:var(--font); font-size:14px; color:var(--text);
+  background:var(--surface); border:1.5px solid var(--line); border-radius:var(--radius-s); padding:9px 12px; outline:none; transition:.18s;}
+select.input:focus, input.input:focus, textarea.input:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-t);}
+.iconbtn{width:38px; height:38px; border-radius:12px; border:1.5px solid var(--line); background:var(--surface);
+  color:var(--text); font-size:17px; cursor:pointer; display:grid; place-items:center; transition:.18s;}
+.iconbtn:hover{border-color:var(--accent); transform:translateY(-1px);}
+
+/* ---------- nav ---------- */
+#mainNav{max-width:1180px; margin:0 auto; padding:12px 20px 0; display:flex; gap:8px; flex-wrap:wrap;}
+#mainNav button{font-family:var(--font); font-size:13.5px; font-weight:600; padding:9px 16px; border-radius:999px;
+  border:1.5px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; transition:.18s;}
+#mainNav button:hover{color:var(--text); border-color:var(--accent-line); transform:translateY(-1px);}
+#mainNav button.on{background:var(--text); color:var(--bg); border-color:var(--text);}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1180px; margin:0 auto; padding:18px 20px 90px;}
+.view{display:none; animation:fadeUp .35s ease;}
+.view.on{display:block;}
+@keyframes fadeUp{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;}}
+.hero{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:30px 32px; position:relative; overflow:hidden; margin-bottom:18px;}
+.hero::before{content:""; position:absolute; inset:0 0 auto 0; height:6px;
+  background:linear-gradient(90deg, var(--accent), var(--gold), var(--green));}
+.eyebrow{font-size:11px; letter-spacing:3px; font-weight:800; color:var(--accent); margin-bottom:8px;}
+.hero h1{font-family:var(--font-display); font-size:clamp(26px,4vw,38px); line-height:1.15; margin-bottom:6px;}
+.hero h1 .u{position:relative; white-space:nowrap;}
+.hero h1 .u::after{content:""; position:absolute; left:-2%; bottom:2px; width:104%; height:.32em;
+  background:var(--accent-t); z-index:-1; border-radius:3px;}
+.hero p.sub{color:var(--muted); font-size:15px; max-width:640px;}
+.stamp{position:absolute; top:22px; right:24px; transform:rotate(8deg); border:2.5px solid var(--accent);
+  color:var(--accent); font-weight:800; font-size:12px; letter-spacing:2px; padding:7px 14px; border-radius:8px;
+  background:color-mix(in srgb, var(--accent-t) 60%, transparent);}
+.grid{display:grid; gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:20px 22px;
+  box-shadow:var(--shadow-s); position:relative; overflow:hidden; transition:.2s;}
+.stat:hover{transform:translateY(-2px); box-shadow:var(--shadow);}
+.stat .k{font-size:11px; letter-spacing:2px; font-weight:800; color:var(--muted); margin-bottom:6px;}
+.stat .v{font-family:var(--font-display); font-size:32px; font-weight:700; line-height:1.1;}
+.stat .s{font-size:13px; color:var(--muted); margin-top:4px;}
+.stat.red .v{color:var(--accent);} .stat.green .v{color:var(--green);} .stat.gold .v{color:var(--gold);}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow-s); padding:22px 24px; margin-bottom:16px;}
+.card h3{font-family:var(--font-display); font-size:19px; margin-bottom:4px;
+  text-decoration:underline wavy var(--accent-line) 2px; text-underline-offset:6px; padding-bottom:8px;}
+.card .hint{font-size:13px; color:var(--muted); margin-bottom:14px;}
+.row{display:grid; gap:12px;} .row4{grid-template-columns:repeat(4,1fr);} .row3{grid-template-columns:repeat(3,1fr);} .row2{grid-template-columns:repeat(2,1fr);}
+.field label{display:block; font-size:12px; font-weight:700; letter-spacing:.6px; color:var(--muted); margin-bottom:6px;}
+.field .input{width:100%;}
+.checkrow{display:flex; align-items:center; gap:9px; font-size:14px; padding:10px 0;}
+.checkrow input{width:19px; height:19px; accent-color:var(--accent); cursor:pointer;}
+.btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+.btn{font-family:var(--font); font-size:14.5px; font-weight:700; padding:11px 22px; border-radius:12px; cursor:pointer;
+  border:1.5px solid var(--text); background:var(--text); color:var(--bg); transition:.18s;}
+.btn:hover{transform:translateY(-1px); box-shadow:var(--shadow-s);}
+.btn.ghost{background:transparent; color:var(--text); border-color:var(--line2);}
+.btn.ghost:hover{border-color:var(--accent);}
+.btn.apple{background:var(--accent); border-color:var(--accent); color:#fff;}
+.btn.green{background:var(--green); border-color:var(--green); color:#fff;}
+.btn.sm{padding:7px 14px; font-size:13px; border-radius:10px;}
+.btn.danger-ghost{background:transparent; color:var(--danger); border-color:var(--danger-line);}
+
+/* ---------- tables ---------- */
+.table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius-s);}
+table{width:100%; border-collapse:collapse; font-size:14px;}
+th{background:var(--surface2); text-align:left; font-size:11.5px; letter-spacing:1.2px; color:var(--muted);
+  padding:11px 12px; border-bottom:1.5px solid var(--line); white-space:nowrap;}
+td{padding:11px 12px; border-bottom:1px dashed var(--line); vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tbody tr{transition:.15s;} tbody tr:hover{background:var(--surface2);}
+.num{text-align:right; font-variant-numeric:tabular-nums; font-weight:600;}
+.empty{text-align:center; padding:38px 20px; color:var(--muted);}
+.empty .big{font-size:34px; margin-bottom:8px;}
+.empty b{display:block; font-family:var(--font-display); font-size:18px; color:var(--text); margin-bottom:4px;}
+
+/* ---------- badges / stickers ---------- */
+.badge{display:inline-block; font-size:11.5px; font-weight:800; letter-spacing:.8px; padding:4px 12px; border-radius:999px;
+  border:1.5px solid; white-space:nowrap;}
+.b-submitted{color:var(--warn); border-color:var(--warn); background:var(--warn-t);}
+.b-approved{color:var(--green); border-color:var(--green); background:var(--green-t);}
+.b-paid{color:#fff; border-color:var(--green-d); background:var(--green);}
+.b-over{color:var(--danger); border-color:var(--danger); background:var(--danger-t);}
+.b-ok{color:var(--green); border-color:var(--green); background:var(--green-t);}
+.b-warnb{color:var(--warn); border-color:var(--warn); background:var(--warn-t);}
+.sticker{display:inline-block; font-size:12px; font-weight:700; padding:5px 13px; border-radius:999px; color:#fff;
+  box-shadow:var(--shadow-s); transform:rotate(-1.5deg);}
+.flag{font-size:12px; font-weight:700; color:var(--muted);}
+.del{background:none; border:none; color:var(--faint); font-size:17px; cursor:pointer; padding:4px 8px; border-radius:8px;}
+.del:hover{color:var(--danger); background:var(--danger-t);}
+
+/* ---------- progress bars ---------- */
+.pbar{height:10px; border-radius:99px; background:var(--bg2); border:1px solid var(--line); overflow:hidden; margin-top:8px;}
+.pbar > i{display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,var(--green),var(--green-d)); transition:width .5s ease;}
+.pbar.over > i{background:linear-gradient(90deg,var(--accent),var(--accent-d));}
+.barrow{display:flex; justify-content:space-between; align-items:baseline; margin-top:10px;}
+.barrow .bl{font-size:13.5px; font-weight:600;} .barrow .bv{font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums;}
+
+/* ---------- misc ---------- */
+.notice{border:1.5px dashed var(--accent-line); background:var(--accent-t); border-radius:var(--radius-s);
+  padding:14px 18px; font-size:13.5px; margin:14px 0; color:var(--text);}
+.notice b{color:var(--accent-d);}
+.kv{display:flex; justify-content:space-between; padding:9px 2px; border-bottom:1px dashed var(--line); font-size:14px;}
+.kv:last-child{border-bottom:none;} .kv b{font-variant-numeric:tabular-nums;}
+.toast{position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--text); color:var(--bg);
+  padding:12px 24px; border-radius:12px; font-size:14px; font-weight:600; opacity:0; pointer-events:none; transition:.25s; z-index:99;
+  box-shadow:var(--shadow); max-width:90vw; text-align:center;}
+.toast.show{opacity:1; transform:translateX(-50%);}
+.attn{display:flex; gap:10px; align-items:flex-start; padding:11px 4px; border-bottom:1px dashed var(--line); font-size:14px;}
+.attn:last-child{border-bottom:none;}
+.attn .ic{flex:0 0 30px; height:30px; border-radius:10px; display:grid; place-items:center; font-size:15px;}
+.attn .ic.r{background:var(--danger-t); color:var(--danger);}
+.attn .ic.g{background:var(--green-t); color:var(--green);}
+.attn .ic.y{background:var(--warn-t); color:var(--warn);}
+details.faq{border:1px solid var(--line); border-radius:var(--radius-s); margin-bottom:10px; background:var(--surface2);}
+details.faq summary{padding:13px 16px; font-weight:700; font-size:14.5px; cursor:pointer; list-style:none;}
+details.faq summary::-webkit-details-marker{display:none;}
+details.faq summary::before{content:"+ "; color:var(--accent); font-weight:800;}
+details.faq[open] summary::before{content:"– ";}
+details.faq .body{padding:0 16px 14px; font-size:14px; color:var(--muted);}
+footer.shop{text-align:center; color:var(--faint); font-size:12px; letter-spacing:2px; padding:30px 0 10px; font-weight:700;}
+@media (max-width:900px){ .g4{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:1fr;} .g2{grid-template-columns:1fr;}
+  .row4{grid-template-columns:repeat(2,1fr);} .row3{grid-template-columns:1fr;} .row2{grid-template-columns:1fr;}
+  .stamp{display:none;} .hero{padding:24px 20px;} }
+@media print{ .topbar, #mainNav, .btnrow, .toast{display:none;} body{background:#fff;} .card,.stat,.hero{box-shadow:none;} }
+</style>
+</head>
+<body>
+
+<!-- ===== LEDGERLOOPSTUDIO DEMO BAR ===== -->
+<div id="lls-demo-bar" style="position:fixed;top:0;left:0;right:0;z-index:999999;background:#C0392B;color:#FFFFFF;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;font-weight:600;text-align:center;padding:9px 12px;box-shadow:0 2px 12px rgba(0,0,0,.18);line-height:1.4;">
+  <span style="margin-right:6px;">&#127876;</span> FREE DEMO &mdash; LedgerLoopStudio
+  <span style="opacity:.65;font-weight:400;margin:0 8px;">|</span>
+  <a href="https://www.etsy.com/shop/LedgerLoopStudio" target="_blank" rel="noopener" style="color:#FFFFFF;text-decoration:underline;text-underline-offset:2px;font-weight:700;">Get the full version on Etsy</a>
+  <span style="opacity:.65;font-weight:400;margin-left:8px;">(10 entries max in demo)</span><span id="demo-entry-counter" style="opacity:.85;font-weight:600;margin-left:12px;background:rgba(255,255,255,.2);padding:2px 10px;border-radius:10px;">0/10 entries used</span>
+</div>
+<script>
+(function(){
+  // Push body content below the demo bar so nothing is hidden
+  function padBody(){
+    var bar = document.getElementById('lls-demo-bar');
+    if (bar) document.body.style.paddingTop = bar.offsetHeight + 'px';
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', padBody);
+  else padBody();
+  window.addEventListener('resize', padBody);
+  setTimeout(padBody, 500);
+})();
+</script>
+<!-- ===== /DEMO BAR ===== -->
+
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <span class="dot">🍎</span>
+      <span><b>Classroom Expenses</b><small>LEDGERLOOPSTUDIO</small></span>
+    </div>
+    <div class="topctl">
+      <select class="input" id="yearSel" aria-label="School year" title="School year"></select>
+      <select class="input" id="fontSel" aria-label="Font" title="Font">
+        <option value="system">System</option><option value="serif">Serif</option>
+        <option value="mono">Mono</option><option value="rounded">Rounded</option>
+      </select>
+      <button class="iconbtn" id="themeToggle" title="Toggle light / dark">◐</button>
+    </div>
+  </div>
+</header>
+
+<nav id="mainNav" aria-label="Sections">
+  <button data-view="dashboard" class="on">Dashboard</button>
+  <button data-view="expenses">Expenses</button>
+  <button data-view="budgets">Budgets</button>
+  <button data-view="reimbursements">Reimbursements</button>
+  <button data-view="tax">Tax Helper</button>
+  <button data-view="reports">Reports</button>
+  <button data-view="settings">Settings</button>
+</nav>
+
+<main class="wrap">
+
+  <!-- ================= DASHBOARD ================= -->
+  <section class="view on" id="view-dashboard">
+    <div class="hero">
+      <div class="stamp">REPORT CARD READY</div>
+      <div class="eyebrow">TEACHER CLASSROOM EXPENSE TRACKER</div>
+      <h1>Every classroom dollar, <span class="u">accounted for.</span></h1>
+      <p class="sub">Track spending against your budget, chase reimbursements, and surface tax deductions — all offline, all private.</p>
+    </div>
+    <div class="grid g4">
+      <div class="stat red"><div class="k">SPENT THIS YEAR</div><div class="v" id="dSpent">$0</div><div class="s" id="dSpentSub">0 expenses</div></div>
+      <div class="stat"><div class="k">BUDGET REMAINING</div><div class="v" id="dBudgetLeft">$0</div><div class="s" id="dBudgetSub">of $0 budget</div></div>
+      <div class="stat gold"><div class="k">AWAITING REIMBURSEMENT</div><div class="v" id="dReimb">$0</div><div class="s" id="dReimbSub">0 claims open</div></div>
+      <div class="stat green"><div class="k">DEDUCTIBLE ESTIMATE</div><div class="v" id="dDeduct">$0</div><div class="s">unreimbursed + receipted</div></div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="grid g2">
+      <div class="card"><h3>Needs attention</h3><div class="hint">Over-budget categories and open reimbursements.</div><div id="attentionList"></div></div>
+      <div class="card"><h3>Recent expenses</h3><div class="hint">Your latest classroom spending.</div><div id="recentList"></div></div>
+    </div>
+  </section>
+
+  <!-- ================= EXPENSES ================= -->
+  <section class="view" id="view-expenses">
+    <div class="card">
+      <h3>Log an expense</h3>
+      <div class="hint">Two seconds at the store — or batch them on Sunday night.</div>
+      <div class="row row4">
+        <div class="field"><label for="eDate">Date</label><input class="input" type="date" id="eDate"></div>
+        <div class="field"><label for="eCat">Category</label><select class="input" id="eCat"></select></div>
+        <div class="field"><label for="eAmt">Amount ($)</label><input class="input" id="eAmt" inputmode="decimal" placeholder="24.99"></div>
+        <div class="field"><label for="eStore">Store / vendor</label><input class="input" id="eStore" maxlength="60" placeholder="Target"></div>
+      </div>
+      <div class="row row3" style="margin-top:12px">
+        <div class="field"><label for="eMethod">Payment method</label>
+          <select class="input" id="eMethod"><option>Personal card</option><option>Cash</option><option>School card</option><option>Other</option></select></div>
+        <div class="field"><label for="eReceiptNote">Receipt note</label><input class="input" id="eReceiptNote" maxlength="80" placeholder="Envelope #3 / photo IMG_2041"></div>
+        <div class="field"><label for="eNotes">Notes</label><input class="input" id="eNotes" maxlength="120" placeholder="Fall bulletin board"></div>
+      </div>
+      <div class="row row2" style="margin-top:6px">
+        <label class="checkrow"><input type="checkbox" id="eReceipt"> 🧾 Receipt saved</label>
+        <label class="checkrow"><input type="checkbox" id="eReimb"> 💸 Reimbursable by school</label>
+      </div>
+      <div class="btnrow"><button class="btn apple" id="addExpenseBtn">Add expense</button>
+        <button class="btn ghost" id="loadSampleBtn">Load sample year</button></div>
+    </div>
+    <div class="card">
+      <h3>All expenses <span class="flag" id="expCount"></span></h3>
+      <div class="row row3" style="margin-bottom:12px">
+        <div class="field"><label for="fCat">Filter: category</label><select class="input" id="fCat"><option value="">All categories</option></select></div>
+        <div class="field"><label for="fMonth">Filter: month</label><select class="input" id="fMonth"><option value="">All months</option></select></div>
+        <div class="field"><label for="fSearch">Search</label><input class="input" id="fSearch" placeholder="store, note…"></div>
+      </div>
+      <div class="table-wrap"><table id="expTable">
+        <thead><tr><th>Date</th><th>Category</th><th>What</th><th class="num">Amount</th><th>Receipt</th><th>Reimb.</th><th></th></tr></thead>
+        <tbody id="expTbody"></tbody></table></div>
+      <div class="empty" id="expEmpty"><div class="big">🍎</div><b>No expenses yet</b>Log your first one above — or load the sample year to explore.</div>
+    </div>
+  </section>
+
+  <!-- ================= BUDGETS ================= -->
+  <section class="view" id="view-budgets">
+    <div class="card">
+      <h3>Annual classroom budget</h3>
+      <div class="hint">Your total spending plan for this school year. Category budgets are optional — set the ones you care about.</div>
+      <div class="row row2">
+        <div class="field"><label for="bAnnual">Annual budget ($)</label><input class="input" id="bAnnual" inputmode="decimal" placeholder="1500"></div>
+        <div class="field"><label>&nbsp;</label><button class="btn" id="saveBudgetBtn">Save budgets</button></div>
+      </div>
+      <div style="height:14px"></div>
+      <div id="catBudgetGrid" class="grid g3"></div>
+    </div>
+    <div class="card">
+      <h3>Budget vs actual</h3>
+      <div class="hint">Green means on track. Red means the category needs attention.</div>
+      <div id="budgetBars"></div>
+    </div>
+  </section>
+
+  <!-- ================= REIMBURSEMENTS ================= -->
+  <section class="view" id="view-reimbursements">
+    <div class="card">
+      <h3>New reimbursement claim</h3>
+      <div class="hint">Bundle reimbursable expenses into one claim for the office.</div>
+      <div class="row row3">
+        <div class="field"><label for="rTitle">Claim title</label><input class="input" id="rTitle" maxlength="60" placeholder="September supplies"></div>
+        <div class="field"><label for="rDate">Date submitted</label><input class="input" type="date" id="rDate"></div>
+        <div class="field"><label>&nbsp;</label><button class="btn apple" id="addReimbBtn">Create claim</button></div>
+      </div>
+      <div class="hint" style="margin-top:10px">Select reimbursable expenses to include:</div>
+      <div id="reimbPickList"></div>
+    </div>
+    <div class="card">
+      <h3>Claims pipeline</h3>
+      <div class="hint">Submitted → Approved → Paid. Click a status badge to advance a claim.</div>
+      <div class="table-wrap"><table id="reimbTable">
+        <thead><tr><th>Claim</th><th>Submitted</th><th class="num">Amount</th><th>Status</th><th></th></tr></thead>
+        <tbody id="reimbTbody"></tbody></table></div>
+      <div class="empty" id="reimbEmpty"><div class="big">💸</div><b>No claims yet</b>Mark expenses as reimbursable, then bundle them into a claim.</div>
+    </div>
+  </section>
+
+  <!-- ================= TAX ================= -->
+  <section class="view" id="view-tax">
+    <div class="hero">
+      <div class="eyebrow">TAX DEDUCTION HELPER</div>
+      <h1>Don't leave <span class="u">deductions</span> on the desk.</h1>
+      <p class="sub">Unreimbursed classroom expenses with saved receipts are often deductible. This helper totals them for your tax prep.</p>
+    </div>
+    <div class="notice">⚠ <b>Informational only — not tax advice.</b> Rules change and situations differ. Confirm with a tax professional before filing.</div>
+    <div class="grid g3">
+      <div class="stat green"><div class="k">POTENTIALLY DEDUCTIBLE</div><div class="v" id="tDeduct">$0</div><div class="s">unreimbursed + receipt saved</div></div>
+      <div class="stat"><div class="k">REIMBURSED (NOT DEDUCTIBLE)</div><div class="v" id="tReimbursed">$0</div><div class="s">paid back by school</div></div>
+      <div class="stat gold"><div class="k">MISSING RECEIPTS</div><div class="v" id="tNoReceipt">$0</div><div class="s">unreimbursed, no receipt</div></div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="card"><h3>Deductible expenses</h3><div class="hint">Unreimbursed, receipt saved — bring this list to tax time.</div>
+      <div class="table-wrap"><table><thead><tr><th>Date</th><th>Category</th><th>What</th><th class="num">Amount</th></tr></thead>
+      <tbody id="taxTbody"></tbody></table></div>
+      <div class="btnrow"><button class="btn ghost" id="taxCsvBtn">Export tax list (CSV)</button>
+        <button class="btn ghost" id="printBtn">Print summary</button></div>
+    </div>
+  </section>
+
+  <!-- ================= REPORTS ================= -->
+  <section class="view" id="view-reports">
+    <div class="card"><h3>Monthly spending</h3><div class="hint">Totals per month this school year.</div><div id="monthBars"></div></div>
+    <div class="grid g2">
+      <div class="card"><h3>By category</h3><div class="hint">Where the money went.</div><div id="catBars"></div></div>
+      <div class="card"><h3>Year at a glance</h3><div class="hint">The numbers that matter.</div><div id="yearGlance"></div>
+        <div class="btnrow"><button class="btn ghost" id="exportCsvBtn">Export expenses (CSV)</button></div></div>
+    </div>
+  </section>
+
+  <!-- ================= SETTINGS ================= -->
+  <section class="view" id="view-settings">
+    <div class="card"><h3>School year</h3><div class="hint">Each year keeps its own expenses, budgets and claims.</div>
+      <div class="row row3">
+        <div class="field"><label for="newYear">Start a new school year</label><input class="input" id="newYear" placeholder="2027–28"></div>
+        <div class="field"><label>&nbsp;</label><button class="btn" id="addYearBtn">Start year</button></div>
+        <div class="field"><label>&nbsp;</label><button class="btn ghost" id="rolloverBtn">Rollover budgets → new year</button></div>
+      </div></div>
+    <div class="card"><h3>Appearance</h3><div class="hint">5 chalk-and-apple themes, 4 fonts. The toggle flips light ⇄ dark.</div>
+      <div class="row row2">
+        <div class="field"><label for="themeSel">Theme</label>
+          <select class="input" id="themeSel">
+            <option value="paper">School Paper (light)</option><option value="chalkboard">Chalkboard (dark)</option>
+            <option value="apple">Apple (light)</option><option value="slate">Slate (dark)</option>
+            <option value="notebook">Notebook (light)</option>
+          </select></div>
+        <div class="field"><label for="fontSel2">Font</label>
+          <select class="input" id="fontSel2">
+            <option value="system">System</option><option value="serif">Serif</option>
+            <option value="mono">Mono</option><option value="rounded">Rounded</option>
+          </select></div>
+      </div></div>
+    <div class="card"><h3>Data</h3><div class="hint">Your data never leaves this device. Back it up any time.</div>
+      <div class="btnrow">
+        <button class="btn ghost" id="exportJsonBtn">Backup (JSON)</button>
+        <button class="btn ghost" id="importJsonBtn">Restore (JSON)</button>
+        <input type="file" id="importFile" accept="application/json" hidden>
+        <button class="btn danger-ghost" id="wipeBtn">Erase this year</button>
+      </div></div>
+    <div class="card"><h3>Help</h3>
+      <details class="faq"><summary>Is this tax advice?</summary><div class="body">No. The Tax Helper is an organizational summary of your own records. Tax rules vary — always confirm deductions with a qualified tax professional.</div></details>
+      <details class="faq"><summary>Where is my data stored?</summary><div class="body">Only in this browser on this device (localStorage). No account, no cloud, no tracking. Use Backup (JSON) before switching devices or clearing browser data.</div></details>
+      <details class="faq"><summary>Can I attach receipt photos?</summary><div class="body">The app is fully offline, so it stores a receipt <i>note</i> (e.g. "Envelope #3" or "photo IMG_2041") rather than image files. Keep the physical or phone photo alongside the note.</div></details>
+      <details class="faq"><summary>How do reimbursements work?</summary><div class="body">Tick "Reimbursable" when logging an expense, then bundle those expenses into a claim on the Reimbursements tab. Advance the claim Submitted → Approved → Paid as the office processes it.</div></details>
+    </div>
+    <footer class="shop">LEDGERLOOPSTUDIO · TEACHER CLASSROOM EXPENSE TRACKER</footer>
+  </section>
+
+</main>
+<div class="toast" id="toast"></div>
+<script>
+/* ================================================================
+   TEACHER CLASSROOM EXPENSE TRACKER — app logic
+   Offline. State in localStorage under "tce-v1". Sample year included.
+   ================================================================ */
+"use strict";
+const $ = id => document.getElementById(id);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const uid = () => "x" + Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
+const fmt = n => "$" + Number(n || 0).toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmt0 = n => "$" + Math.round(Number(n || 0)).toLocaleString("en-US");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const todayISO = () => new Date().toISOString().slice(0, 10);
+
+const CATS = ["Supplies","Decor","Books","Tech","Snacks","Field trips","Other"];
+const CAT_COLORS = {Supplies:"#2F5DA3",Decor:"#B98A2F",Books:"#6A4FA3",Tech:"#2E7D4F",Snacks:"#C46A2B","Field trips":"#2B8A8A",Other:"#8A8F98"};
+const METHODS = ["Personal card","Cash","School card","Other"];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const RSTATUS = ["submitted","approved","paid"];
+const RLABEL = {submitted:"SUBMITTED", approved:"APPROVED", paid:"PAID"};
+const RCLASS = {submitted:"b-submitted", approved:"b-approved", paid:"b-paid"};
+
+const LSKEY = "tce-v1";
+let S = null;
+
+function blankYear(){ return {expenses:[], budgets:{annual:0, cats:{}}, reimbursements:[]}; }
+function blankState(){
+  return { settings:{theme:"paper", font:"system", year:"2026–27"},
+           years:{ "2026–27": blankYear() } };
+}
+function load(){
+  try{ const raw = localStorage.getItem(LSKEY); if(raw){ S = JSON.parse(raw); } }catch(e){}
+  if(!S || !S.settings || !S.years) S = blankState();
+  if(!S.years[S.settings.year]) S.settings.year = Object.keys(S.years)[0];
+}
+function save(){ try{ localStorage.setItem(LSKEY, JSON.stringify(S)); }catch(e){} }
+function Y(){ return S.years[S.settings.year]; }
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"), 2400); }
+
+function applyTheme(){
+  document.documentElement.setAttribute("data-theme", S.settings.theme);
+  document.documentElement.setAttribute("data-font", S.settings.font);
+  const fs=$("fontSel"); if(fs) fs.value=S.settings.font;
+  const fs2=$("fontSel2"); if(fs2) fs2.value=S.settings.font;
+  const ts=$("themeSel"); if(ts) ts.value=S.settings.theme;
+  const ys=$("yearSel"); if(ys){ ys.innerHTML = Object.keys(S.years).map(y=>`<option ${y===S.settings.year?"selected":""}>${esc(y)}</option>`).join(""); }
+}
+
+/* ---------- nav ---------- */
+function showView(v){
+  $$("#mainNav button").forEach(b=>b.classList.toggle("on", b.dataset.view===v));
+  $$(".view").forEach(s=>s.classList.toggle("on", s.id==="view-"+v));
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ---------- derived numbers ---------- */
+function totals(){
+  const y=Y();
+  const spent = y.expenses.reduce((a,e)=>a+Number(e.amount||0),0);
+  const annual = Number(y.budgets.annual||0);
+  const open = y.reimbursements.filter(r=>r.status!=="paid")
+    .reduce((a,r)=>a+Number(r.amount||0),0);
+  const paidIds = new Set();
+  y.reimbursements.forEach(r=>{ if(r.status==="paid") (r.expenseIds||[]).forEach(id=>paidIds.add(id)); });
+  const deduct = y.expenses.filter(e=>!e.reimbursable || !paidIds.has(e.id))
+    .filter(e=>e.receipt).reduce((a,e)=>a+Number(e.amount||0),0);
+  const reimbursedPaid = y.expenses.filter(e=>paidIds.has(e.id)).reduce((a,e)=>a+Number(e.amount||0),0);
+  const noReceipt = y.expenses.filter(e=>!paidIds.has(e.id) && !e.receipt)
+    .reduce((a,e)=>a+Number(e.amount||0),0);
+  const perCat = {}; CATS.forEach(c=>perCat[c]=0);
+  y.expenses.forEach(e=>{ perCat[e.category]=(perCat[e.category]||0)+Number(e.amount||0); });
+  return {spent, annual, open, deduct, reimbursedPaid, noReceipt, perCat, n:y.expenses.length};
+}
+
+/* ---------- render: dashboard ---------- */
+function renderDashboard(){
+  const t=totals(), y=Y();
+  $("dSpent").textContent=fmt0(t.spent); $("dSpentSub").textContent=t.n+" expense"+(t.n===1?"":"s");
+  const left=t.annual-t.spent;
+  $("dBudgetLeft").textContent=(left<0?"−":"")+fmt0(Math.abs(left));
+  $("dBudgetSub").textContent="of "+fmt0(t.annual)+" budget";
+  $("dReimb").textContent=fmt0(t.open);
+  $("dReimbSub").textContent=y.reimbursements.filter(r=>r.status!=="paid").length+" claims open";
+  $("dDeduct").textContent=fmt0(t.deduct);
+  // attention
+  const at=[];
+  CATS.forEach(c=>{ const b=Number(y.budgets.cats[c]||0);
+    if(b>0 && t.perCat[c]>b) at.push({ic:"r", sym:"!", html:`<b>${esc(c)}</b> is over budget — ${fmt0(t.perCat[c])} of ${fmt0(b)}`}); });
+  y.reimbursements.filter(r=>r.status==="submitted").forEach(r=>
+    at.push({ic:"y", sym:"◷", html:`Claim <b>${esc(r.title)}</b> (${fmt0(r.amount)}) still submitted — nudge the office`}));
+  const unclaimed=y.expenses.filter(e=>e.reimbursable && !y.reimbursements.some(r=>(r.expenseIds||[]).includes(e.id)));
+  if(unclaimed.length) at.push({ic:"y", sym:"💸", html:`<b>${unclaimed.length}</b> reimbursable expense(s) not yet in a claim`});
+  const noRec=y.expenses.filter(e=>!e.receipt);
+  if(noRec.length) at.push({ic:"g", sym:"🧾", html:`<b>${noRec.length}</b> expense(s) missing receipts — log them before tax time`});
+  $("attentionList").innerHTML = at.length ? at.map(a=>
+    `<div class="attn"><span class="ic ${a.ic}">${a.sym}</span><span>${a.html}</span></div>`).join("")
+    : `<div class="attn"><span class="ic g">✓</span><span>All clear — nothing needs attention.</span></div>`;
+  // recent
+  const rec=[...y.expenses].sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,6);
+  $("recentList").innerHTML = rec.length ? rec.map(e=>
+    `<div class="attn"><span class="ic" style="background:${CAT_COLORS[e.category]||"#8A8F98"}22;color:${CAT_COLORS[e.category]||"#8A8F98"}">●</span>
+     <span style="flex:1">${esc(e.store||e.category)} <span class="flag">· ${esc(e.category)} · ${esc(e.date||"")}</span></span>
+     <b class="num">${fmt(e.amount)}</b></div>`).join("")
+    : `<div class="empty"><div class="big">🍎</div><b>Nothing yet</b>Your recent expenses will appear here.</div>`;
+}
+
+/* ---------- render: expenses ---------- */
+function catOptions(sel, val){ sel.innerHTML = CATS.map(c=>`<option ${c===val?"selected":""}>${c}</option>`).join(""); }
+function renderExpenses(){
+  const y=Y();
+  catOptions($("eCat"));
+  if(!$("eDate").value) $("eDate").value=todayISO();
+  const fc=$("fCat");
+  if(!fc.dataset.init){ fc.innerHTML='<option value="">All categories</option>'+CATS.map(c=>`<option>${c}</option>`).join(""); fc.dataset.init="1"; }
+  const fm=$("fMonth");
+  if(!fm.dataset.init){ fm.innerHTML='<option value="">All months</option>'+MONTHS.map((m,i)=>`<option value="${i}">${m}</option>`).join(""); fm.dataset.init="1"; }
+  let list=[...y.expenses].sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  const q=$("fSearch").value.trim().toLowerCase();
+  if(fc.value) list=list.filter(e=>e.category===fc.value);
+  if(fm.value!=="") list=list.filter(e=>new Date(e.date+"T12:00:00").getMonth()===Number(fm.value));
+  if(q) list=list.filter(e=>((e.store||"")+" "+(e.notes||"")+" "+(e.category||"")).toLowerCase().includes(q));
+  $("expCount").textContent="· "+list.length+" shown";
+  $("expEmpty").style.display=list.length?"none":"";
+  $("expTbody").innerHTML=list.map(e=>
+    `<tr><td style="white-space:nowrap">${esc(e.date||"—")}</td>
+     <td><span class="sticker" style="background:${CAT_COLORS[e.category]||"#8A8F98"}">${esc(e.category)}</span></td>
+     <td>${esc(e.store||"—")}${e.notes?`<div class="flag">${esc(e.notes)}</div>`:""}</td>
+     <td class="num">${fmt(e.amount)}</td>
+     <td>${e.receipt?'<span class="badge b-ok">✓ SAVED</span>':'<span class="flag">missing</span>'}</td>
+     <td>${e.reimbursable?'<span class="badge b-submitted">$ CLAIMABLE</span>':'<span class="flag">—</span>'}</td>
+     <td style="white-space:nowrap"><button class="btn sm ghost" data-act="tog-receipt" data-id="${e.id}" title="Toggle receipt">🧾</button>
+     <button class="del" data-act="del-exp" data-id="${e.id}" title="Delete">×</button></td></tr>`).join("");
+}
+function addExpense(){
+  const amt=parseFloat($("eAmt").value);
+  if(!(amt>0)){ toast("Enter an amount first."); return; }
+  Y().expenses.push({id:uid(), date:$("eDate").value||todayISO(), category:$("eCat").value,
+    amount:Math.round(amt*100)/100, store:$("eStore").value.trim(), method:$("eMethod").value,
+    receiptNote:$("eReceiptNote").value.trim(), notes:$("eNotes").value.trim(),
+    receipt:$("eReceipt").checked, reimbursable:$("eReimb").checked});
+  ["eAmt","eStore","eReceiptNote","eNotes"].forEach(i=>$(i).value="");
+  $("eReceipt").checked=false; $("eReimb").checked=false;
+  save(); renderAll(); toast("Expense logged ✓");
+}
+
+/* ---------- render: budgets ---------- */
+function renderBudgets(){
+  const y=Y(), t=totals();
+  $("bAnnual").value=y.budgets.annual||"";
+  $("catBudgetGrid").innerHTML=CATS.map((c,i)=>
+    `<div class="field"><label for="cb_${i}">${esc(c)} budget ($)</label>
+     <input class="input" id="cb_${i}" inputmode="decimal" placeholder="—" value="${y.budgets.cats[c]||""}"></div>`).join("");
+  $("budgetBars").innerHTML=CATS.map(c=>{
+    const b=Number(y.budgets.cats[c]||0), s=t.perCat[c]||0;
+    if(!(b>0)) return `<div class="barrow"><span class="bl">${esc(c)}</span><span class="bv">${fmt0(s)} · no budget set</span></div>`;
+    const pct=Math.min(100, s/b*100), over=s>b;
+    return `<div class="barrow"><span class="bl">${esc(c)}</span>
+      <span class="bv">${fmt0(s)} of ${fmt0(b)} ${over?'<span class="badge b-over">OVER</span>':'<span class="badge b-ok">ON TRACK</span>'}</span></div>
+      <div class="pbar${over?" over":""}"><i style="width:${pct}%"></i></div><div style="height:10px"></div>`;
+  }).join("");
+}
+function saveBudgets(){
+  const y=Y();
+  y.budgets.annual=parseFloat($("bAnnual").value)||0;
+  CATS.forEach((c,i)=>{ const el=document.getElementById("cb_"+i); const n=parseFloat(el.value);
+    if(n>0) y.budgets.cats[c]=Math.round(n*100)/100; else delete y.budgets.cats[c]; });
+  save(); renderAll(); toast("Budgets saved ✓");
+}
+
+/* ---------- render: reimbursements ---------- */
+function renderReimb(){
+  const y=Y();
+  if(!$("rDate").value) $("rDate").value=todayISO();
+  const claimed=new Set(); y.reimbursements.forEach(r=>(r.expenseIds||[]).forEach(id=>claimed.add(id)));
+  const avail=y.expenses.filter(e=>e.reimbursable && !claimed.has(e.id))
+    .sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  $("reimbPickList").innerHTML=avail.length?avail.map(e=>
+    `<label class="checkrow" style="border-bottom:1px dashed var(--line)">
+      <input type="checkbox" class="rpick" value="${e.id}">
+      <span style="flex:1">${esc(e.date)} · <b>${esc(e.store||e.category)}</b> <span class="flag">${esc(e.category)}</span></span>
+      <b class="num">${fmt(e.amount)}</b></label>`).join("")
+    :`<div class="empty" style="padding:16px"><b>No unclaimed reimbursable expenses</b>Tick “Reimbursable” when logging expenses.</div>`;
+  const rows=[...y.reimbursements].sort((a,b)=>String(b.dateSubmitted).localeCompare(String(a.dateSubmitted)));
+  $("reimbEmpty").style.display=rows.length?"none":"";
+  $("reimbTbody").innerHTML=rows.map(r=>{
+    const ni=RSTATUS.indexOf(r.status), next=ni<2?RSTATUS[ni+1]:null;
+    return `<tr><td><b>${esc(r.title)}</b><div class="flag">${(r.expenseIds||[]).length} expense(s) · ${esc(r.dateSubmitted||"")}</div></td>
+      <td style="white-space:nowrap">${esc(r.dateSubmitted||"—")}</td><td class="num">${fmt(r.amount)}</td>
+      <td>${next?`<button class="badge ${RCLASS[r.status]}" data-act="adv-reimb" data-id="${r.id}" title="Advance to ${RLABEL[next]}" style="cursor:pointer">${RLABEL[r.status]} →</button>`
+                :`<span class="badge ${RCLASS[r.status]}">${RLABEL[r.status]}</span>`}</td>
+      <td><button class="del" data-act="del-reimb" data-id="${r.id}" title="Delete">×</button></td></tr>`;}).join("");
+}
+function addReimb(){
+  const ids=$$(".rpick").filter(c=>c.checked).map(c=>c.value);
+  if(!ids.length){ toast("Select at least one expense."); return; }
+  const y=Y(), amt=ids.reduce((a,id)=>{ const e=y.expenses.find(x=>x.id===id); return a+(e?Number(e.amount||0):0); },0);
+  y.reimbursements.push({id:uid(), title:$("rTitle").value.trim()||("Claim "+(y.reimbursements.length+1)),
+    dateSubmitted:$("rDate").value||todayISO(), expenseIds:ids, amount:Math.round(amt*100)/100, status:"submitted"});
+  $("rTitle").value=""; save(); renderAll(); toast("Claim created ✓");
+}
+
+/* ---------- render: tax ---------- */
+function renderTax(){
+  const t=totals(), y=Y();
+  $("tDeduct").textContent=fmt0(t.deduct);
+  $("tReimbursed").textContent=fmt0(t.reimbursedPaid);
+  $("tNoReceipt").textContent=fmt0(t.noReceipt);
+  const paidIds=new Set();
+  y.reimbursements.forEach(r=>{ if(r.status==="paid") (r.expenseIds||[]).forEach(id=>paidIds.add(id)); });
+  const rows=y.expenses.filter(e=>!paidIds.has(e.id)&&e.receipt)
+    .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  $("taxTbody").innerHTML=rows.length?rows.map(e=>
+    `<tr><td style="white-space:nowrap">${esc(e.date||"—")}</td><td>${esc(e.category)}</td>
+     <td>${esc(e.store||"—")}${e.receiptNote?` <span class="flag">· 🧾 ${esc(e.receiptNote)}</span>`:""}</td>
+     <td class="num">${fmt(e.amount)}</td></tr>`).join("")
+    :`<tr><td colspan="4"><div class="empty"><div class="big">🧾</div><b>No deductible expenses yet</b>Log expenses with receipts saved.</div></td></tr>`;
+}
+
+/* ---------- render: reports ---------- */
+function renderReports(){
+  const y=Y(), t=totals();
+  const perMonth=new Array(12).fill(0);
+  y.expenses.forEach(e=>{ const m=new Date(e.date+"T12:00:00").getMonth(); if(!isNaN(m)) perMonth[m]+=Number(e.amount||0); });
+  const mx=Math.max(1,...perMonth);
+  $("monthBars").innerHTML=perMonth.map((v,i)=>
+    `<div class="barrow"><span class="bl">${MONTHS[i]}</span><span class="bv">${fmt0(v)}</span></div>
+     <div class="pbar"><i style="width:${(v/mx*100).toFixed(1)}%"></i></div><div style="height:8px"></div>`).join("");
+  const tot=Math.max(1,t.spent);
+  $("catBars").innerHTML=CATS.map(c=>{ const v=t.perCat[c]||0; if(!(v>0)) return "";
+    return `<div class="barrow"><span class="bl"><span class="sticker" style="background:${CAT_COLORS[c]}">${esc(c)}</span></span>
+      <span class="bv">${fmt0(v)} · ${(v/tot*100).toFixed(0)}%</span></div>
+      <div class="pbar"><i style="width:${(v/tot*100).toFixed(1)}%;background:linear-gradient(90deg,${CAT_COLORS[c]},${CAT_COLORS[c]}DD)"></i></div><div style="height:8px"></div>`; }).join("")
+    || `<div class="empty"><b>No data yet</b></div>`;
+  const topCat=CATS.reduce((a,c)=>t.perCat[c]>t.perCat[a]?c:a,"Supplies");
+  $("yearGlance").innerHTML=`
+    <div class="kv"><span>Total spent</span><b>${fmt(t.spent)}</b></div>
+    <div class="kv"><span>Budget</span><b>${fmt0(t.annual)}</b></div>
+    <div class="kv"><span>Remaining</span><b>${fmt(t.annual-t.spent)}</b></div>
+    <div class="kv"><span>Top category</span><b>${esc(topCat)} (${fmt0(t.perCat[topCat])})</b></div>
+    <div class="kv"><span>Expenses logged</span><b>${t.n}</b></div>
+    <div class="kv"><span>Avg per expense</span><b>${t.n?fmt(t.spent/t.n):fmt(0)}</b></div>`;
+}
+
+/* ---------- render: settings ---------- */
+function renderSettings(){ /* selects synced in applyTheme */ }
+
+/* ---------- actions ---------- */
+function download(name, text, mime){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([text],{type:mime||"text/plain"})); a.download=name;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},400);
+}
+function csvCell(v){ v=String(v==null?"":v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+function exportExpensesCSV(){
+  const y=Y(), rows=[["Date","Category","Store","Amount","Payment","Receipt saved","Receipt note","Reimbursable","Notes"]];
+  [...y.expenses].sort((a,b)=>String(a.date).localeCompare(String(b.date)))
+    .forEach(e=>rows.push([e.date,e.category,e.store,e.amount,e.method,e.receipt?"yes":"no",e.receiptNote,e.reimbursable?"yes":"no",e.notes]));
+  download("classroom-expenses-"+S.settings.year.replace(/[^0-9]/g,"")+".csv", rows.map(r=>r.map(csvCell).join(",")).join("\n"), "text/csv");
+  toast("CSV exported ✓");
+}
+function exportTaxCSV(){
+  const y=Y(), paidIds=new Set();
+  y.reimbursements.forEach(r=>{ if(r.status==="paid") (r.expenseIds||[]).forEach(id=>paidIds.add(id)); });
+  const rows=[["Date","Category","Store","Amount","Receipt note"]];
+  y.expenses.filter(e=>!paidIds.has(e.id)&&e.receipt)
+    .sort((a,b)=>String(a.date).localeCompare(String(b.date)))
+    .forEach(e=>rows.push([e.date,e.category,e.store,e.amount,e.receiptNote]));
+  download("tax-deductions-"+S.settings.year.replace(/[^0-9]/g,"")+".csv", rows.map(r=>r.map(csvCell).join(",")).join("\n"), "text/csv");
+  toast("Tax list exported ✓");
+}
+
+/* ---------- sample data ---------- */
+function sampleData(){
+  const y=Y();
+  const E=(date,category,amount,store,method,receipt,receiptNote,reimbursable,notes)=>
+    ({id:uid(),date,category,amount,store,method:method||"Personal card",receipt:!!receipt,
+      receiptNote:receiptNote||"",reimbursable:!!reimbursable,notes:notes||""});
+  y.expenses=[
+    E("2026-08-18","Supplies",42.18,"Target",0,1,"Env #1",1,"First-day kits"),
+    E("2026-08-22","Decor",67.45,"Amazon",0,1,"Order 112-3948",1,"Bulletin board borders"),
+    E("2026-08-29","Books",128.90,"Scholastic",0,1,"Order S-8812",1,"Classroom library set"),
+    E("2026-09-04","Tech",89.99,"Best Buy",0,1,"Receipt drawer",0,"Headphone splitter set"),
+    E("2026-09-09","Snacks",24.60,"Costco",0,1,"Env #2",0,"Reward bin restock"),
+    E("2026-09-15","Supplies",31.75,"Dollar Tree",0,1,"Env #2",1,"Glue sticks + markers"),
+    E("2026-09-21","Decor",45.00,"Etsy",0,1,"Email receipt",0,"Alphabet banner"),
+    E("2026-10-02","Books",56.40,"Barnes & Noble",0,1,"Bag staple",1,"Read-aloud titles"),
+    E("2026-10-07","Field trips",180.00,"City Museum",0,1,"Invoice M-2201",1,"Deposit, spring trip"),
+    E("2026-10-12","Supplies",18.29,"Target",0,0,"",0,"Sticky notes"),
+    E("2026-10-19","Tech",149.00,"Amazon",0,1,"Order 112-7710",0,"Document camera lamp"),
+    E("2026-10-26","Snacks",32.15,"Trader Joe's",0,1,"Env #3",0,"Halloween party"),
+    E("2026-11-03","Supplies",27.80,"Staples",0,1,"Env #3",1,"Card stock"),
+    E("2026-11-10","Decor",52.30,"Michaels",0,1,"Bag staple",0,"Winter display"),
+    E("2026-11-17","Books",74.25,"Scholastic",0,1,"Order S-9031",1,"Book fair picks"),
+    E("2026-12-01","Other",40.00,"PTA dues","Cash",0,"",0,""),
+    E("2026-12-08","Snacks",21.90,"Costco",0,1,"Env #4",0,"Cocoa day"),
+    E("2027-01-12","Supplies",36.55,"Target",0,1,"Env #5",1,"Second-semester restock"),
+  ].map(e=>({...e, method:e.method||"Personal card"}));
+  y.budgets={annual:1500, cats:{Supplies:350, Decor:200, Books:350, Tech:250, Snacks:120, "Field trips":200, Other:30}};
+  const pick=(...idx)=>idx.map(i=>y.expenses[i].id);
+  y.reimbursements=[
+    {id:uid(), title:"August setup", dateSubmitted:"2026-09-02", expenseIds:pick(0,1,2), amount:238.53, status:"paid"},
+    {id:uid(), title:"September supplies", dateSubmitted:"2026-10-03", expenseIds:pick(5,12), amount:59.55, status:"approved"},
+    {id:uid(), title:"October books + trip", dateSubmitted:"2026-11-01", expenseIds:pick(7,8), amount:236.40, status:"submitted"},
+  ];
+  save(); renderAll();
+}
+
+/* ---------- events ---------- */
+function renderAll(){ renderDashboard(); renderExpenses(); renderBudgets(); renderReimb(); renderTax(); renderReports(); renderSettings(); }
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  load(); applyTheme();
+  $("eDate").value=todayISO();
+  $$("#mainNav button").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+  $("fontSel").addEventListener("change",e=>{S.settings.font=e.target.value;save();applyTheme();});
+  $("fontSel2").addEventListener("change",e=>{S.settings.font=e.target.value;save();applyTheme();});
+  $("themeSel").addEventListener("change",e=>{S.settings.theme=e.target.value;save();applyTheme();});
+  const DARK={paper:"chalkboard",chalkboard:"paper",apple:"slate",slate:"apple",notebook:"slate"};
+  $("themeToggle").addEventListener("click",()=>{S.settings.theme=DARK[S.settings.theme]||"paper";save();applyTheme();});
+  $("yearSel").addEventListener("change",e=>{S.settings.year=e.target.value;save();renderAll();});
+  $("addExpenseBtn").addEventListener("click",addExpense);
+  $("eAmt").addEventListener("keydown",e=>{if(e.key==="Enter")addExpense();});
+  ["fCat","fMonth"].forEach(i=>$(i).addEventListener("change",renderExpenses));
+  $("fSearch").addEventListener("input",renderExpenses);
+  $("saveBudgetBtn").addEventListener("click",saveBudgets);
+  $("addReimbBtn").addEventListener("click",addReimb);
+  $("exportCsvBtn").addEventListener("click",exportExpensesCSV);
+  $("taxCsvBtn").addEventListener("click",exportTaxCSV);
+  $("printBtn").addEventListener("click",()=>window.print());
+  $("exportJsonBtn").addEventListener("click",()=>{
+    download("classroom-expenses-backup.json", JSON.stringify(S,null,2), "application/json"); toast("Backup saved ✓");});
+  $("importJsonBtn").addEventListener("click",()=>$("importFile").click());
+  $("importFile").addEventListener("change",e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=()=>{ try{ const d=JSON.parse(r.result);
+        if(d.settings&&d.years){ S=d; save(); applyTheme(); renderAll(); toast("Backup restored ✓"); }
+        else toast("That file doesn't look like a backup."); }catch(err){ toast("Couldn't read that file."); } };
+    r.readAsText(f); e.target.value=""; });
+  $("addYearBtn").addEventListener("click",()=>{
+    const v=$("newYear").value.trim(); if(!v){toast("Name the school year first.");return;}
+    if(S.years[v]){toast("That year already exists.");return;}
+    S.years[v]=blankYear(); S.settings.year=v; $("newYear").value=""; save(); applyTheme(); renderAll(); toast("New school year started ✓");});
+  $("rolloverBtn").addEventListener("click",()=>{
+    const v=$("newYear").value.trim()||prompt("New school year name:","2027–28"); if(!v) return;
+    if(S.years[v]){toast("That year already exists.");return;}
+    const src=Y();
+    S.years[v]={expenses:[], budgets:JSON.parse(JSON.stringify(src.budgets)), reimbursements:[]};
+    S.settings.year=v; save(); applyTheme(); renderAll(); toast("Budgets rolled over to "+v+" ✓");});
+  $("wipeBtn").addEventListener("click",()=>{
+    if(confirm("Erase ALL data for "+S.settings.year+"? This can't be undone.")){
+      S.years[S.settings.year]=blankYear(); save(); renderAll(); toast("Year erased."); }});
+  $("loadSampleBtn").addEventListener("click",()=>{
+    if(confirm("Load the sample school year? This replaces current data.")) { sampleData(); toast("Sample year loaded ✓"); }});
+  document.addEventListener("click",e=>{
+    const b=e.target.closest("[data-act]"); if(!b) return;
+    const id=b.dataset.id, y=Y();
+    if(b.dataset.act==="del-exp"){ if(confirm("Delete this expense?")){
+      y.expenses=y.expenses.filter(x=>x.id!==id);
+      y.reimbursements.forEach(r=>r.expenseIds=(r.expenseIds||[]).filter(x=>x!==id));
+      save(); renderAll(); } }
+    if(b.dataset.act==="tog-receipt"){ const x=y.expenses.find(v=>v.id===id);
+      if(x){ x.receipt=!x.receipt; save(); renderAll(); } }
+    if(b.dataset.act==="adv-reimb"){ const r=y.reimbursements.find(v=>v.id===id);
+      if(r){ const ni=RSTATUS.indexOf(r.status); if(ni<2){ r.status=RSTATUS[ni+1]; save(); renderAll(); toast("Claim → "+RLABEL[r.status]); } } }
+    if(b.dataset.act==="del-reimb"){ if(confirm("Delete this claim?")){
+      y.reimbursements=y.reimbursements.filter(x=>x.id!==id); save(); renderAll(); } }
+  });
+  renderAll();
+});
+</script>
+
+<!-- ===== LEDGERLOOPSTUDIO DEMO ENTRY LIMIT (10) ===== -->
+<script>
+(function(){
+  var DEMO_LIMIT = 10;
+  var DEMO_MSG = "Demo limit reached (10 entries). Get the full version on Etsy for unlimited entries!";
+  var addCount = 0;
+  function isAddButton(el){
+    if (!el || !el.textContent) return false;
+    var t = el.textContent.trim().toLowerCase();
+    if (t.indexOf('theme') > -1 || t.indexOf('font') > -1 || t.indexOf('mode') > -1) return false;
+    var addWords = ['add', 'save', 'create'];
+    for (var i = 0; i < addWords.length; i++){
+      if (t === addWords[i] || t.indexOf(addWords[i]+' ') === 0) return true;
+    }
+    if (t === '+') return true;
+    return false;
+  }
+  function showMsg(){
+    try { if (typeof toast === 'function') toast(DEMO_MSG); else alert(DEMO_MSG); }
+    catch(e){ alert(DEMO_MSG); }
+  }
+  function updateCounter(){
+    var c = document.getElementById('demo-entry-counter');
+    if (c) c.textContent = addCount + '/' + DEMO_LIMIT + ' entries used';
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('button,input[type="submit"],input[type="button"]') : null;
+    if (!btn || !isAddButton(btn)) return;
+    if (addCount >= DEMO_LIMIT) {
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      showMsg(); return false;
+    }
+    addCount++; updateCounter();
+  }, true);
+  document.addEventListener('submit', function(e){
+    if (addCount >= DEMO_LIMIT) {
+      e.preventDefault(); e.stopPropagation(); showMsg(); return false;
+    }
+    addCount++; updateCounter();
+  }, true);
+})();
+</script>
+<!-- ===== /DEMO LIMIT ===== -->
+
+</body>
+</html>
